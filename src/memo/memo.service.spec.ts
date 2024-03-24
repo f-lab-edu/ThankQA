@@ -38,12 +38,11 @@ describe('MemoService', () => {
 
     memoService = module.get<MemoService>(MemoService);
   });
-
-  it('should be defined', () => {
+  it('Should_BeDefined', () => {
     expect(memoService).toBeDefined();
   });
 
-  it('findAll', async () => {
+  it('Should_ReturnAllMemos_When_FindAllIsCalled', async () => {
     // arragne
     const memos: MemoEntity[] = [sampleMemo, sampleMemo];
 
@@ -54,7 +53,7 @@ describe('MemoService', () => {
     expect(mockMemoRepository.find).toHaveBeenCalled();
     expect(result).toEqual(memos);
   });
-  it('findMemoById', async () => {
+  it('Should_ReturnMemo_When_FindMemoByIdIsCalledWithExistingId', async () => {
     //arrange
     const id = existingId;
     jest.spyOn(mockMemoRepository, 'findOne').mockResolvedValue(sampleMemo);
@@ -67,7 +66,7 @@ describe('MemoService', () => {
     expect(result).toBe(sampleMemo);
   });
 
-  it('should throw NotFoundException if memo is not found', async () => {
+  it('Should_ThrowNotFoundException_When_MemoIsNotFoundById', async () => {
     //arrange
     const id = nonExistingId;
     jest.spyOn(mockMemoRepository, 'findOne').mockResolvedValue(undefined);
@@ -77,7 +76,7 @@ describe('MemoService', () => {
     expect(mockMemoRepository.findOne).toHaveBeenCalledWith({ where: { id } });
   });
 
-  it('findOne', async () => {
+  it('Should_ReturnMemo_When_FindOneIsCalledWithExistingId', async () => {
     //arrange
     const id = existingId;
     jest.spyOn(mockMemoRepository, 'findOne').mockResolvedValue(sampleMemo);
@@ -89,7 +88,7 @@ describe('MemoService', () => {
     expect(mockMemoRepository.findOne).toHaveBeenCalledWith({ where: { id } });
     expect(result).toBe(sampleMemo);
   });
-  it('create', async () => {
+  it('Should_CreateMemo_When_CreateIsCalledWithMemo', async () => {
     //arragne
     jest.spyOn(mockMemoRepository, 'save').mockReturnValue(sampleMemo);
     //act
@@ -98,7 +97,7 @@ describe('MemoService', () => {
     expect(mockMemoRepository.save).toHaveBeenCalled();
     expect(result).toEqual(sampleMemo);
   });
-  it('update', async () => {
+  it('Should_UpdateMemo_When_UpdateIsCalledWithExistingIdAndUpdatedInfo', async () => {
     // Arrange
     const id = existingId;
     const updatedMemo: Partial<MemoEntity> = {
