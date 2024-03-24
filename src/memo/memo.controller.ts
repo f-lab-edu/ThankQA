@@ -6,9 +6,11 @@ import {
   Post,
   Put,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { MemoService } from './memo.service';
 import { MemoEntity } from './memo.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('memo')
 export class MemoController {
@@ -25,6 +27,7 @@ export class MemoController {
   }
 
   @Post('/')
+  @UseGuards(AuthGuard('jwt'))
   async create(@Body() memo: MemoEntity): Promise<MemoEntity> {
     return this.memoService.create(memo);
   }

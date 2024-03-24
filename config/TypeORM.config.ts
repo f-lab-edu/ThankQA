@@ -2,6 +2,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 // import * as dotenv from 'dotenv';
 // dotenv.config();
 import { MemoEntity } from 'src/memo/memo.entity';
+import User from 'src/user/user.entity';
 
 export const typeORMConfig: TypeOrmModuleOptions = {
   type: 'mysql',
@@ -10,8 +11,8 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   username: 'admin',
   password: '1234',
   database: 'memo',
-  entities: [MemoEntity],
-  // synchronize: true,
-  // autoLoadEntities: true,
+  entities: [MemoEntity, User],
+  synchronize: true,
+  autoLoadEntities: true,
   logging: true,
 };
