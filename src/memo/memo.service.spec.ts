@@ -15,6 +15,16 @@ describe('MemoService', () => {
     delete: jest.fn(),
   };
 
+  // sample data
+  const existingId = 1;
+  const nonExistingId = 999;
+  const sampleMemo: MemoEntity = {
+    id: 1,
+    memo: 'first memo',
+    createdAt: new Date('2024-03-23T00:00:00Z'),
+    updatedAt: new Date('2024-03-23T12:00:00Z'),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -35,20 +45,7 @@ describe('MemoService', () => {
 
   it('findAll', async () => {
     // arragne
-    const memos: MemoEntity[] = [
-      {
-        id: 1,
-        memo: 'first memo',
-        createdAt: new Date('2024-03-23T00:00:00Z'),
-        updatedAt: new Date('2024-03-23T12:00:00Z'),
-      },
-      {
-        id: 2,
-        memo: 'second memo',
-        createdAt: new Date('2024-03-23T00:00:00Z'),
-        updatedAt: new Date('2024-03-23T12:00:00Z'),
-      },
-    ];
+    const memos: MemoEntity[] = [sampleMemo, sampleMemo];
 
     jest.spyOn(mockMemoRepository, 'find').mockReturnValue(memos);
     // act
@@ -59,26 +56,20 @@ describe('MemoService', () => {
   });
   it('findMemoById', async () => {
     //arrange
-    const id = 1;
-    const existingMemo: MemoEntity = {
-      id,
-      memo: 'first memo',
-      createdAt: new Date('2024-03-23T00:00:00Z'),
-      updatedAt: new Date('2024-03-23T12:00:00Z'),
-    };
-    jest.spyOn(mockMemoRepository, 'findOne').mockResolvedValue(existingMemo);
+    const id = existingId;
+    jest.spyOn(mockMemoRepository, 'findOne').mockResolvedValue(sampleMemo);
 
     //act
     const result = await memoService.findOne(id);
 
     //assert
     expect(mockMemoRepository.findOne).toHaveBeenCalledWith({ where: { id } });
-    expect(result).toBe(existingMemo);
+    expect(result).toBe(sampleMemo);
   });
 
   it('should throw NotFoundException if memo is not found', async () => {
     //arrange
-    const id = 999;
+    const id = nonExistingId;
     jest.spyOn(mockMemoRepository, 'findOne').mockResolvedValue(undefined);
 
     // act & assert
@@ -88,51 +79,33 @@ describe('MemoService', () => {
 
   it('findOne', async () => {
     //arrange
-    const id = 1;
-    const existingMemo: MemoEntity = {
-      id,
-      memo: 'first memo',
-      createdAt: new Date('2024-03-23T00:00:00Z'),
-      updatedAt: new Date('2024-03-23T12:00:00Z'),
-    };
-    jest.spyOn(mockMemoRepository, 'findOne').mockResolvedValue(existingMemo);
+    const id = existingId;
+    jest.spyOn(mockMemoRepository, 'findOne').mockResolvedValue(sampleMemo);
 
     //act
     const result = await memoService.findOne(id);
 
     //assert
     expect(mockMemoRepository.findOne).toHaveBeenCalledWith({ where: { id } });
-    expect(result).toBe(existingMemo);
+    expect(result).toBe(sampleMemo);
   });
   it('create', async () => {
     //arragne
-    const memo: MemoEntity = {
-      id: 1,
-      memo: 'first memo',
-      createdAt: new Date('2024-03-23T00:00:00Z'),
-      updatedAt: new Date('2024-03-23T12:00:00Z'),
-    };
-    jest.spyOn(mockMemoRepository, 'save').mockReturnValue(memo);
+    jest.spyOn(mockMemoRepository, 'save').mockReturnValue(sampleMemo);
     //act
-    const result = await memoService.create(memo);
+    const result = await memoService.create(sampleMemo);
     //assert
     expect(mockMemoRepository.save).toHaveBeenCalled();
-    expect(result).toEqual(memo);
+    expect(result).toEqual(sampleMemo);
   });
   it('update', async () => {
     // Arrange
-    const id = 1;
+    const id = existingId;
     const updatedMemo: Partial<MemoEntity> = {
       memo: 'updated memo',
     };
-    const existingMemo: MemoEntity = {
-      id,
-      memo: 'first memo',
-      createdAt: new Date('2024-03-23T00:00:00Z'),
-      updatedAt: new Date('2024-03-23T12:00:00Z'),
-    };
 
-    jest.spyOn(mockMemoRepository, 'findOne').mockResolvedValue(existingMemo);
+    jest.spyOn(mockMemoRepository, 'findOne').mockResolvedValue(sampleMemo);
     jest.spyOn(mockMemoRepository, 'update').mockResolvedValue(undefined);
 
     // Act
