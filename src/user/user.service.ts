@@ -17,14 +17,10 @@ export class UserService {
 
   async getUserById(id: number) {
     const user = await this.userRepository.findOne({
-      where: {
-        id: id,
-      },
+      where: { id },
     });
-    if (user) {
-      return user;
-    }
-    throw new NotFoundException('Could not find the user');
+    if (!user) throw new NotFoundException('Could not find the user');
+    return user;
   }
 
   async createUser(createUserDto: CreateUserDto) {
@@ -39,13 +35,9 @@ export class UserService {
 
   async deleteById(id: number) {
     const user = await this.userRepository.findOne({
-      where: {
-        id: id,
-      },
+      where: { id },
     });
-    if (!user) {
-      return null;
-    }
+    if (!user) return null;
 
     await this.userRepository.remove(user);
     return user;
