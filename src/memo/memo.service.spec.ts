@@ -117,5 +117,19 @@ describe('MemoService', () => {
     expect(mockMemoRepository.update).toHaveBeenCalledWith(id, updatedMemo);
   });
 
-  it('delete', () => {});
+  it('Should_DeleteMemo_When_DeleteIsCalledWithExistingId', async () => {
+    // Arrange
+    const id = existingId;
+    jest.spyOn(mockMemoRepository, 'findOne').mockResolvedValue(sampleMemo);
+    jest.spyOn(mockMemoRepository, 'delete').mockResolvedValue(undefined);
+
+    // Act
+    await memoService.delete(id);
+
+    // Assert
+    expect(mockMemoRepository.findOne).toHaveBeenCalledWith({
+      where: { id },
+    });
+    expect(mockMemoRepository.delete).toHaveBeenCalledWith(id);
+  });
 });
